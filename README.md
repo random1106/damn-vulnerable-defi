@@ -6,5 +6,9 @@ Problem has been solved:
 
 Unstoppable
 
+NaiveReceiver
+
 Truster
+
+Side Entrance
 
