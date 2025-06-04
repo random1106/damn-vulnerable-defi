@@ -4,19 +4,19 @@ This is an ongoing project aimed at solving the challenges.
 
 Problem has been solved:
 
-Unstoppable
+1. Unstoppable
 
-NaiveReceiver
+2. NaiveReceiver
 
-Truster
+3. Truster
 
-Side Entrance
+4. Side Entrance
 
-The Rewarder
+5. The Rewarder
 
-Selfie
+6. Selfie
 
-Compromised
+7. Compromised
 
-Puppet
+8. Puppet
 
