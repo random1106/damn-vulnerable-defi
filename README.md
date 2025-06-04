@@ -16,3 +16,5 @@ The Rewarder
 
 Selfie
 
+Compromised
+
