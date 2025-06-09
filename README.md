@@ -20,3 +20,5 @@ Problem has been solved:
 
 8. Puppet
 
+9. Puppet-v2
+
