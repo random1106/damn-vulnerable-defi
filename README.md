@@ -22,3 +22,5 @@ Problem has been solved:
 
 9. Puppet-v2
 
+10. Free Rider
+
