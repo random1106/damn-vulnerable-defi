@@ -26,3 +26,5 @@ Problem has been solved:
 
 11. Backdoor
 
+12. Climber
+

