@@ -30,4 +30,4 @@ Problem has been solved:
 
 15. abi-smuggling
 
-16. Shards (large gas consumption, need improvement)
+16. Shards
