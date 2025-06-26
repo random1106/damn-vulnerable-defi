@@ -2,6 +2,7 @@
 // Damn Vulnerable DeFi v4 (https://damnvulnerabledefi.xyz)
 pragma solidity =0.8.25;
 
+import {Attacker} from "./Attacker.sol";
 import {Test, console} from "forge-std/Test.sol";
 import {
     ShardsNFTMarketplace,
@@ -114,7 +115,7 @@ contract ShardsChallenge is Test {
      * CODE YOUR SOLUTION HERE
      */
     function test_shards() public checkSolvedByPlayer {
-        
+        new Attacker(marketplace, token, recovery);
     }
 
     /**
