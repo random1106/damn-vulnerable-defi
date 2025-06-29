@@ -131,26 +131,6 @@ contract PuppetV3Challenge is Test {
         weth.approve(address(lendingPool), weth.balanceOf(player));
         lendingPool.borrow(LENDING_POOL_INITIAL_TOKEN_BALANCE);
         token.transfer(recovery, LENDING_POOL_INITIAL_TOKEN_BALANCE);
-
-        // (uint160 sqrtPriceX96, int24 tick, uint16 observationIndex,
-        // uint16 observationCardinality, uint16 observationCardinalityNext,
-        // uint8 feeProtocol, bool unlocked) = pool.slot0();
-        // // console.log(observationIndex);
-        // // console.log(observationCardinalityNext);
-        // // the block timestamp of the observation
-        // (uint32 blockTimestamp,
-        // // the tick accumulator, i.e. tick * time elapsed since the pool was first initialized
-        // int56 tickCumulative,
-        // // the seconds per liquidity, i.e. seconds elapsed / max(1, liquidity) since the pool was first initialized
-        // uint160 secondsPerLiquidityCumulativeX128,
-        // // whether or not the observation is initialized
-        // bool initialized) = pool.observations(2);
-        // console.log("initialized", initialized);
-        // console.log("tick", tick);
-        // console.log("cumulative", tickCumulative);
-        // // console.log(blockTimestamp);
-        // // console.log(initialized);
-        // console.log("amount", lendingPool.calculateDepositOfWETHRequired(1_000_000e18));
     }
 
     /**

