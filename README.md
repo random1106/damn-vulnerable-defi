@@ -28,6 +28,8 @@ Problem has been solved:
 
 12. Climber
 
+14. Puppet-v3
+
 15. abi-smuggling
 
 16. Shards
