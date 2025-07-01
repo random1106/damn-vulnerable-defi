@@ -33,3 +33,5 @@ Problem has been solved:
 15. abi-smuggling
 
 16. Shards
+
+18. Withdrawal
